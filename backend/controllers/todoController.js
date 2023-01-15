@@ -121,9 +121,8 @@ exports.deleteTodo = async (req, res) => {
   try {
     const delTodo = await Todo.findById(req.params.id);
     if (delTodo) {
-      await Todo.deleteOne();
+      await Todo.findByIdAndDelete(req.params.id);
     }
-    // const delTodo = await Todo.findByIdAndDelete(req.params.id);
     res.status(201).json({
       success: true,
       deleteTodo: delTodo,
@@ -139,8 +138,19 @@ exports.deleteTodo = async (req, res) => {
 // Delete Todo - Task
 exports.deleteTask = async (req, res) => {
   try {
-    const userId = req.params.id;
-    const task = await Todo.deleteOne(userId);
+    // const userId = req.params.id;
+    // await Todo.findById(userId);
+    // const task = await Todo.findByIdAndDelete({
+    //   userId,
+    //   tasks: [req.params.index + 1],
+    // });
+    const task = await Todo.findById(req.params.id);
+    // console.log(task);
+    // await task.tasks.remove(req.params.index);
+    res.status(201).json({
+      success: true,
+      deleteTask: task,
+    });
   } catch (error) {
     console.log(error);
     res.status(401).json({
