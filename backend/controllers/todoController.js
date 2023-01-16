@@ -1,9 +1,9 @@
 const Todo = require("../models/todoSchema");
-
+// Home Route 
 exports.home = (req, res) => {
   res.send("Homeee");
 };
-// Create Todo
+// ---------- Create Todo(Title) ----------
 exports.createTodo = async (req, res) => {
   try {
     const { title } = req.body;
@@ -25,8 +25,7 @@ exports.createTodo = async (req, res) => {
     });
   }
 };
-
-// Create Todo - Task
+// ---------- Create Task ----------
 exports.createTodoTask = async (req, res) => {
   try {
     const { addTask } = req.body;
@@ -48,7 +47,7 @@ exports.createTodoTask = async (req, res) => {
     });
   }
 };
-// get Todo (title)
+// ---------- Get All Todos ----------
 exports.getTodos = async (req, res) => {
   try {
     const todosAll = await Todo.find();
@@ -67,9 +66,7 @@ exports.getTodos = async (req, res) => {
     });
   }
 };
-// get Todo - Task #Pending
-// exports.getTodoTasks = async (req, res) => {};
-// Edit Todo
+// ---------- Edit Todo (Title) ----------
 exports.editTodo = async (req, res) => {
   try {
     const { changeTitle } = req.body;
@@ -90,23 +87,18 @@ exports.editTodo = async (req, res) => {
     });
   }
 };
-// Edit Todo - Task #TODO
+// ---------- Edit Todo (Task) ----------
 exports.editTask = async (req, res) => {
   try {
     const { changeTask } = req.body;
-    console.log(changeTask);
+    // Finding Todo Id
     const edit = await Todo.findById(req.params.id);
-
-    // myarr.indexOf("turtles") > -1;
-    // const found = edit.tasks.indexOf(changeTask) > -1;
-    // if (found) {
-    //   edit.tasks(changeTask);
-    //   await edit.save();
-    // }
-
+    // Using splice to replace with new task
+    const edited = edit.tasks.splice([req.params.index], 1, changeTask);
+    await edit.save();
     res.status(201).json({
       success: true,
-      edit,
+      editTask: edited,
     });
   } catch (error) {
     console.log(error);
@@ -116,7 +108,7 @@ exports.editTask = async (req, res) => {
     });
   }
 };
-// Delete Todo
+// ---------- Delete Todo (Title) ----------
 exports.deleteTodo = async (req, res) => {
   try {
     const delTodo = await Todo.findById(req.params.id);
@@ -135,21 +127,15 @@ exports.deleteTodo = async (req, res) => {
     });
   }
 };
-// Delete Todo - Task
+// ---------- Delete Task (Tasks) ----------
 exports.deleteTask = async (req, res) => {
   try {
-    // const userId = req.params.id;
-    // await Todo.findById(userId);
-    // const task = await Todo.findByIdAndDelete({
-    //   userId,
-    //   tasks: [req.params.index + 1],
-    // });
-    const task = await Todo.findById(req.params.id);
-    // console.log(task);
-    // await task.tasks.remove(req.params.index);
+    const resp = await Todo.findById(req.params.id);
+    const deletedTask = resp.tasks.splice([req.params.index], 1);
+    await resp.save();
     res.status(201).json({
       success: true,
-      deleteTask: task,
+      deleteTask: deletedTask,
     });
   } catch (error) {
     console.log(error);

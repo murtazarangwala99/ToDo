@@ -8,17 +8,13 @@ function Todo() {
   const [todoData, setTodoData] = useState("");
   //  ----------  Submiting The Title Of Todo  ----------
   const submitTitle = async () => {
-    const todo = {
-      title: todoTitle,
-    };
-    await axios.post("/createTodo", todo);
-
-    // if (typeof todo != "string") {
-    //   alert("Enter Todo in String!");
-    // } else {
-    //   // await on this async call and then chain to show a toast message to user
-    //   await axios.post("/createTodo", todo);
-    // }
+    if (!todoTitle) {
+      alert("Enter Title to Create Todo !");
+    } else {
+      await axios.post("/createTodo", {
+        title: todoTitle,
+      });
+    }
   };
   // ---------- Fetching All ToDos ----------
   const fetchTodoData = async () => {
@@ -27,7 +23,6 @@ function Todo() {
     if (res.data.data.todosAll.length > 0) {
       setTodoData(res.data.data.todosAll);
     }
-    // console.log(res.data.data.todosAll);
   };
   // ---------- Editing Todo Title ----------
   const editTitle = async (todoId) => {
@@ -51,7 +46,7 @@ function Todo() {
     }
   };
   //  ---------- Adding New Task On clicking addTask Button  ----------
-  const addTodoTasks = async (todoId) => {
+  const addTask = async (todoId) => {
     const newTask = prompt("Enter Task : ");
 
     if (!newTask) {
@@ -65,34 +60,39 @@ function Todo() {
       console.log(resTask);
     }
   };
-  //  ---------- Pending : Delete Task ----------
-  // const editTask = async () => {};
-  //  ---------- Pending : Delete Task ----------
+  // ---------- Edit task by Clicking Edit Button ----------
+  const editTask = async (todoId, index) => {
+    const newTask = prompt("Enter New Task : ");
+    if (!newTask) {
+      alert("Please Enter Task !");
+    } else {
+      const resEditTask = await axios.put(`/changeTask/${todoId}/${index}`, {
+        changeTask: newTask,
+      });
+      console.log(resEditTask);
+    }
+  };
+  //  ---------- Delete Task ----------
   const deleteTask = async (todoId, index) => {
     if (window.confirm("Do you want to Delete This Task !")) {
-      const resDeleteTask = await axios.delete(`/deleteTask/${todoId}/${index}`);
+      const resDeleteTask = await axios.delete(
+        `/deleteTask/${todoId}/${index}`
+      );
       console.log(resDeleteTask);
     } else {
       alert("You pressed Cancel !");
     }
   };
 
-  // To load the data before page got refrece we use useEffect
+  // To load the data before page got load
   useEffect(() => {
     fetchTodoData();
-  }, []);
-  // mentioning todoData here will end you up in infinite API calls, the dependency array should be empty
-  // 👉🏻 Watch this video: https://youtu.be/MXSuOR2yRvQ
-
+  }, [todoData]);
   //  ---------- Submiting Todo Title and preventing Default ----------
   const handleSubmit = (event) => {
     event.preventDefault();
-    // 💡 Where is the UI side validation to check for emptiness of the entered values?
-
     // To submit the data
     submitTitle();
-    // Empty the previous Details, resetting state is expensive DOM operation before you update check for all others as well
-    // I can see you didn't reset other values captured as task, data
     setTodoTitle("");
   };
 
@@ -100,9 +100,6 @@ function Todo() {
     <>
       {/* Navbar  */}
       {/* Title of Web Page */}
-      {/* 💡 Explore how to load application name dynamically from .env of the REACT application. */}
-      {/* Comes as a part of config driven UI, understand how Create react app is handling env values just 
-      like Backend you have dotenv */}
       <Heading heading="ToDo Application" />
       {/*  Title, Task and Submit Button */}
       <div className="container">
@@ -111,7 +108,6 @@ function Todo() {
           method="post"
           className="container flex flex-col gap-4 justify-center items-center my-8"
           onSubmit={handleSubmit}
-          // 🚩 onClick is a blunder to add here
         >
           <div>
             <label
@@ -129,7 +125,6 @@ function Todo() {
               onChange={(event) => setTodoTitle(event.target.value)}
             />
           </div>
-          {/* Removed Tasks Input */}
           <button
             type="submit"
             className="bg-green-500 px-4 py-2 rounded-lg cursor-pointer hover:bg-green-300 hover:text-black"
@@ -143,14 +138,11 @@ function Todo() {
         <p>Your ToDo :</p>
         {/* Maybe Put One Refresh Button To load Todo */}
       </div>
-      {/* All TODOS AND IT's Tasks */}
-      {/* ********************* Testing 2 ******************************/}
+      {/* All Todos with It's Tasks */}
       <div className="container grid grid-col-4 m-auto bg-white text-black w-3/5 border">
-        {/* TODOs List */}
+        {/* Todos List */}
         {todoData &&
           todoData.map((todos) => (
-            // Every rendered list values via .map() in react must have a "key" prop associated with it
-            // to bring out the best out of reconciliation algo built for react
             <div key={todos._id}>
               <details className="border-4 m-2 border-black">
                 {/* TODO Title */}
@@ -158,7 +150,7 @@ function Todo() {
                   <h2 className="inline-block w-1/4">{todos.title}</h2>
                   <button
                     className="bg-blue-500 rounded-lg px-3 py-1 mx-2 hover:cursor-pointer hover:bg-blue-700 hover:text-white"
-                    onClick={() => addTodoTasks(todos)}
+                    onClick={() => addTask(todos)}
                   >
                     Add Tasks
                   </button>
@@ -175,7 +167,7 @@ function Todo() {
                     Delete
                   </button>
                 </summary>
-                {/* Tasks  */}
+                {/* Tasks */}
                 <div className="container">
                   {todos.tasks &&
                     todos.tasks.map((task, index) => (
@@ -185,7 +177,10 @@ function Todo() {
                       >
                         Task {index + 1} : {task}
                         <div className="px-8">
-                          <button className="bg-yellow-500 rounded-lg px-3 py-1 mx-2 hover:cursor-pointer hover:bg-yellow-700 hover:text-white">
+                          <button
+                            className="bg-yellow-500 rounded-lg px-3 py-1 mx-2 hover:cursor-pointer hover:bg-yellow-700 hover:text-white"
+                            onClick={() => editTask(todos._id, index)}
+                          >
                             Edit
                           </button>
                           <button

@@ -18,9 +18,8 @@ router.get("/", home);
 router.post("/createTodo", createTodo);
 router.post("/createTodoTask/:id", createTodoTask);
 router.get("/getTodos", getTodos);
-// router.get("/getTodoTasks/:id", getTodoTasks);
 router.put("/changeTitle/:id", editTodo);
-router.put("/changeTask/:id", editTask);
+router.put("/changeTask/:id/:index", editTask);
 router.delete("/deleteTodo/:id", deleteTodo);
 router.delete("/deleteTask/:id/:index", deleteTask);
 
