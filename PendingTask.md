@@ -2,14 +2,11 @@
 
 ## Back-end
 
-- Edit/Delete Task
 - User Login/Registration
 - Some Validation realted to Task and Title
 
 ## Front-end
 
-- Edit/Delete Task
-- Sending Task from Front-end
 - User Login/Registration
 - Validation Of Entering Task/Title
 - Dependency Array Problem in useEffect
