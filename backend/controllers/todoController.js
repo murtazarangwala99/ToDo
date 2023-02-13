@@ -1,17 +1,26 @@
 const Todo = require("../models/todoSchema");
-// Home Route 
+// Home Route
 exports.home = (req, res) => {
   res.send("Homeee");
 };
 // ---------- Create Todo(Title) ----------
 exports.createTodo = async (req, res) => {
   try {
-    const { title } = req.body;
+    const { title, userId } = req.body;
     console.log(title);
+    console.log(userId);
+
     if (!title) {
       throw new Error("Please enter Todo Title !");
     }
-    const created_todo = await Todo.create({ title });
+
+    // const titleExists = await Todo.findOne({ title });
+    // if (titleExists) {
+    //   throw new Error("This TODO Title is Already Exists");
+    // }
+
+    const created_todo = await Todo.create({ title, userId });
+
     res.status(201).json({
       success: true,
       title,
@@ -50,7 +59,8 @@ exports.createTodoTask = async (req, res) => {
 // ---------- Get All Todos ----------
 exports.getTodos = async (req, res) => {
   try {
-    const todosAll = await Todo.find();
+    const userId = req.params.userId;
+    const todosAll = await Todo.find({ userId });
     res.status(201).json({
       success: true,
       results: todosAll.length,

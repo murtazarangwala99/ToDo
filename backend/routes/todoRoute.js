@@ -17,7 +17,7 @@ router.get("/", home);
 // User Part Pending
 router.post("/createTodo", createTodo);
 router.post("/createTodoTask/:id", createTodoTask);
-router.get("/getTodos", getTodos);
+router.get("/getTodos/:userId", getTodos);
 router.put("/changeTitle/:id", editTodo);
 router.put("/changeTask/:id/:index", editTask);
 router.delete("/deleteTodo/:id", deleteTodo);

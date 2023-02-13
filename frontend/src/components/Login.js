@@ -1,7 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import Heading from "../UIComponent/Heading";
+import { useNavigate } from "react-router-dom";
+import { account } from "../appwrite/appwriteConfig";
 
 function Login() {
+  const navigate = useNavigate();
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+  });
+  console.log(user);
+
+  const loginUser = async (e) => {
+    e.preventDefault();
+    try {
+      await account.createEmailSession(user.email, user.password);
+      navigate("/getTodos");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Heading heading="Login Page" />
@@ -23,6 +42,12 @@ function Login() {
               name="user-email"
               id="user-email"
               className="my-1 rounded-sm text-black focus:bg-green-300"
+              onChange={(e) => {
+                setUser({
+                  ...user,
+                  email: e.target.value,
+                });
+              }}
             />
           </div>
           <div>
@@ -36,11 +61,18 @@ function Login() {
               type="password"
               className="my-1 rounded-sm text-black focus:bg-green-300"
               id="user-password"
+              onChange={(e) => {
+                setUser({
+                  ...user,
+                  password: e.target.value,
+                });
+              }}
             />
           </div>
           <button
             type="submit"
             className="bg-green-500 px-4 py-2 rounded-lg cursor-pointer hover:bg-green-300 hover:text-black"
+            onClick={loginUser}
           >
             Submit
           </button>
@@ -48,7 +80,7 @@ function Login() {
         {/* Signup Title */}
         <p>Still Not a User ? 👇 Click Below Button</p>
         <a
-          href="./signup.html"
+          href="/signup"
           className="bg-green-500 px-8 py-2 my-4 rounded-lg cursor-pointer hover:bg-green-300 hover:text-black"
         >
           SignUp
