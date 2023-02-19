@@ -24,7 +24,10 @@ function Todo() {
   };
   // ---------- Fetching All ToDos ----------
   const fetchTodoData = async (userId) => {
-    const res = await axios.get(`/getTodos/${userId.$id}`); // here also got error ($id)
+    // const userIds = account.get();
+    console.log(`userId: ${userId}`);
+    // console.log(`userId: ${userId.$id}`);
+    const res = await axios.get(`/getTodos/${userId}`); // here also got error ($id)
     // console.log(userId.$id);
     // If no todos are there dont set value
     if (res.data.data.todosAll.length > 0) {
@@ -101,28 +104,21 @@ function Todo() {
         console.log(error);
       }
     );
-    // console.log(userDetails.$id);
+    // console.log(userDetails);
   };
 
+  const [setId, setSetId] = useState();
+  console.log(setId);
+  const user_id = account.get();
   // To load the data before page got load
   useEffect(() => {
     user();
-    fetchTodoData(userDetails); // if i use here same problem // here also got error ($id)
-  }, []);
-  // cd175bf0-e062-487a-9a36-c29ef966fd15
+    user_id.then((r) => {
+      setSetId(r.$id);
+      fetchTodoData(r.$id);
+    });
+  });
 
-  // useEffect(() => {
-  //   const getData = account.get();
-  //   getData.then(
-  //     function (response) {
-  //       setUserDetails(response);
-  //     },
-  //     function (error) {
-  //       console.log(error);
-  //     }
-  //   );
-  //   console.log(userDetails);
-  // }, []);
   //  ---------- Submiting Todo Title and preventing Default ----------
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -176,17 +172,17 @@ function Todo() {
             {/* Maybe Put One Refresh Button To load Todo */}
           </div>
           {/* All Todos with It's Tasks */}
-
           <div className="container grid grid-col-4 m-auto bg-white text-black w-3/5 border">
             {/* p Tag is For Debugging Only */}
             <p>
-              Welcome {userDetails.name} & Email: {userDetails.email} & $id :
+              <span className="text-red-500">For debbuging only :</span> Welcome{" "}
+              {userDetails.name} & Email: {userDetails.email} & $id :
               {userDetails.$id}
             </p>
             {/* Todos List */}
             {todoData &&
               todoData.map((todos) => (
-                <div key={(todos._id, userDetails.$id)}>
+                <div key={todos._id}>
                   <details className="border-4 m-2 border-black">
                     {/* TODO Title */}
                     <summary className="py-3 px-4 font-bold cursor-pointer select-none w-full">

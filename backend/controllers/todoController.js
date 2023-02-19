@@ -14,11 +14,6 @@ exports.createTodo = async (req, res) => {
       throw new Error("Please enter Todo Title !");
     }
 
-    // const titleExists = await Todo.findOne({ title });
-    // if (titleExists) {
-    //   throw new Error("This TODO Title is Already Exists");
-    // }
-
     const created_todo = await Todo.create({ title, userId });
 
     res.status(201).json({
