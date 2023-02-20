@@ -35,7 +35,7 @@ function SignUp() {
   };
 
   return (
-    <>
+    <div className="mt-20">
       <Heading heading="Registration Page" />
       <div className="flex flex-col justify-center items-center container">
         <form
@@ -121,7 +121,7 @@ function SignUp() {
           Login
         </a>
       </div>
-    </>
+    </div>
   );
 }
 

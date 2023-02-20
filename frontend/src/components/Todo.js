@@ -108,7 +108,7 @@ function Todo() {
   };
 
   const [setId, setSetId] = useState();
-  console.log(setId);
+  // console.log(setId);
   const user_id = account.get();
   // To load the data before page got load
   useEffect(() => {
