@@ -21,6 +21,7 @@ function Todo() {
         userId: userDetails.$id,
       });
     }
+    // setRefresh((prev) => !prev);
   };
   // ---------- Fetching All ToDos ----------
   const fetchTodoData = async (userId) => {
@@ -106,18 +107,22 @@ function Todo() {
     );
     // console.log(userDetails);
   };
-
+  // eslint-disable-next-line
   const [setId, setSetId] = useState();
-  // console.log(setId);
   const user_id = account.get();
   // To load the data before page got load
+  let shouldLoad = true;
   useEffect(() => {
-    user();
-    user_id.then((r) => {
-      setSetId(r.$id);
-      fetchTodoData(r.$id);
-    });
-  });
+    if (shouldLoad) {
+      // eslint-disable-next-line
+      shouldLoad = false;
+      user();
+      user_id.then((r) => {
+        setSetId(r.$id);
+        fetchTodoData(r.$id);
+      });
+    }
+  }, [todoTitle]);
 
   //  ---------- Submiting Todo Title and preventing Default ----------
   const handleSubmit = (event) => {
@@ -172,13 +177,20 @@ function Todo() {
             {/* Maybe Put One Refresh Button To load Todo */}
           </div>
           {/* All Todos with It's Tasks */}
+
           <div className="container grid grid-col-4 m-auto bg-white text-black w-3/5 border">
             {/* p Tag is For Debugging Only */}
-            <p>
-              <span className="text-red-500">For debbuging only :</span> Welcome{" "}
-              {userDetails.name} & Email: {userDetails.email} & $id :
-              {userDetails.$id}
-            </p>
+            {/* <p className="mx-4">
+              For Changes in your Todo-Tasks you have to Refresh Page(Working on
+              it.)
+            </p> */}
+            <button
+              className="bg-green-500  px-4 py-2 rounded-lg cursor-pointer hover:bg-green-300 hover:text-black"
+              onClick={() => window.location.reload(true)}
+            >
+              Refresh
+            </button>
+
             {/* Todos List */}
             {todoData &&
               todoData.map((todos) => (
