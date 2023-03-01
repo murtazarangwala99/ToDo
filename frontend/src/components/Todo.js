@@ -46,6 +46,7 @@ function Todo() {
       });
       console.log(resEditTitle);
     }
+    window.location.reload();
   };
   // ---------- Delete Title ----------
   const deleteTitle = async (todoId) => {
@@ -55,6 +56,7 @@ function Todo() {
     } else {
       alert("You pressed Cancel !");
     }
+    window.location.reload();
   };
   //  ---------- Adding New Task On clicking addTask Button  ----------
   const addTask = async (todoId) => {
@@ -70,6 +72,7 @@ function Todo() {
       });
       console.log(resTask);
     }
+    window.location.reload();
   };
   // ---------- Edit task by Clicking Edit Button ----------
   const editTask = async (todoId, index) => {
@@ -82,6 +85,7 @@ function Todo() {
       });
       console.log(resEditTask);
     }
+    window.location.reload();
   };
   //  ---------- Delete Task ----------
   const deleteTask = async (todoId, index) => {
@@ -93,6 +97,7 @@ function Todo() {
     } else {
       alert("You pressed Cancel !");
     }
+    window.location.reload();
   };
 
   const user = () => {
