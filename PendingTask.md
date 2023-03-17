@@ -12,6 +12,11 @@
 - Dependency Array Problem in useEffect
 - .env configuration in React
 
+## Future Tasks
+
+- To capture tasks as array values instead of string(Add Array Of Tasks to be added).
+- Mobile Responsive
+
 ## Suggestions
 
 - 💡 Where is the UI side validation to check for emptiness of the entered values? (inside handleSubmit())
@@ -23,8 +28,3 @@
     like Backend you have dotenv
 - Every rendered list values via .map() in react must have a "key" prop associated with it, to bring out the best out of reconciliation algo built for react (IN JSX LOOP PART)
 -
-
-## Future Tasks
-
-- To capture tasks as array values instead of string(Add Array Of Tasks to be added).
-- Mobile Responsive
